@@ -37,20 +37,23 @@ export class ProdutoService {
         return newProd;   
     }
 
-    updateProduct(idProd: number, camposAlterar: Partial<Produtos>): Produtos | undefined {
-        const produtoAlterar = produtos.find((produto) => produto.id === idProd);
-        const produtoAtualizado = {...camposAlterar, ...produtoAlterar}
+    updateProduct(prodId: number, camposAlterar: Partial<Produtos>): Produtos | undefined {
 
-        produtos.map((produtoDesejado) => {
-            if (produtoDesejado.id === idProd)
-            {
-                return produtoAtualizado
-            }
-            else
-            {
-                return produtoDesejado
-            }
-        });
+        const produtoAlterar = produtos.find((produto) => produto.id === prodId);
+        const produtoAtualizado = {
+            id: prodId,
+            nomeProd: camposAlterar.nomeProd ?? produtoAlterar?.nomeProd!,
+            preco: camposAlterar.preco ?? produtoAlterar?.preco!,
+            marca: camposAlterar.marca ?? produtoAlterar?.marca!,
+            marcaAlternativa: camposAlterar.marcaAlternativa ?? produtoAlterar?.marcaAlternativa!,
+            categoria: camposAlterar.categoria ?? produtoAlterar?.categoria!,
+            estoqueAtual: camposAlterar.estoqueAtual ?? produtoAlterar?.estoqueAtual!,
+            estoqueUsado: camposAlterar.estoqueUsado ?? produtoAlterar?.estoqueUsado!,
+            ultAtualizacao: camposAlterar.ultAtualizacao ?? produtoAlterar?.ultAtualizacao!,
+            dataCriacao: camposAlterar.dataCriacao ?? produtoAlterar?.dataCriacao!
+        }
+
+        produtos[prodId-1] = produtoAtualizado
 
         return produtoAtualizado;
     }

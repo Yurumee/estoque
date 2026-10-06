@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Patch } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, Param, Post, Patch, Put } from "@nestjs/common";
 import { NewProduto } from "./dto/novoproduto.dto";
 import { ProdutoService } from "./produto.service";
 import { Produtos } from "../database/fakeData";

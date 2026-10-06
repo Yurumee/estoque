@@ -2,11 +2,11 @@ export interface Produtos {
     id: number,
     nomeProd: string;
     preco: number;
-    marca: string;
-    marcaAlternativa: string;
+    marca?: string;
+    marcaAlternativa?: string;
     categoria: string;
     estoqueAtual: number;
-    estoqueUsado: number;
+    estoqueUsado?: number;
     dataCriacao: Date;
     ultAtualizacao: Date;
 }
