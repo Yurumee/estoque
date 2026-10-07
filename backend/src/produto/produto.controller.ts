@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Patch, Put } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, Param, Post, Patch, Delete } from "@nestjs/common";
 import { NewProduto } from "./dto/novoproduto.dto";
 import { ProdutoService } from "./produto.service";
 import { Produtos } from "../database/fakeData";
@@ -13,7 +13,7 @@ export class ProdutoController {
     @Get(':id')
     @HttpCode(200)
     findProduct(@Param('id') id: number): Produtos | undefined {
-        const prodId = +id
+        const prodId = id
         return this.produtoService.findProductId(prodId)
     }
 
@@ -70,7 +70,13 @@ export class ProdutoController {
     alterProduct(@Param('id') id: number, 
     @Body() ProdAlter: Partial<Produtos>): Produtos | undefined {
         
-        return this.produtoService.updateProduct(+id, ProdAlter)
+        return this.produtoService.updateProduct(id, ProdAlter)
+    }
+
+    @Delete('excluir/:id')
+    @HttpCode(200)
+    deleteProduct(@Param('id') id: number): Produtos[] {
+        return this.produtoService.deleteProduct(id)
     }
 
 }

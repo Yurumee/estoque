@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Produto } from "./interfaces/produto.interface";
 import { Produtos, produtos } from '../database/fakeData'
+import { reportUnhandledError } from "rxjs/internal/util/reportUnhandledError";
 
 @Injectable()
 export class ProdutoService {
@@ -53,8 +54,14 @@ export class ProdutoService {
             dataCriacao: camposAlterar.dataCriacao ?? produtoAlterar?.dataCriacao!
         }
 
-        produtos[prodId-1] = produtoAtualizado
+        produtos[prodId-1] = produtoAtualizado;
 
         return produtoAtualizado;
+    }
+
+    deleteProduct(prodId: number): Produtos[] {
+        // const produtosDeletado = produtos.filter((produto) => produto.id !== prodId)
+        const produtosDeletado = produtos.splice(prodId-1, 1);
+        return produtosDeletado
     }
 }
