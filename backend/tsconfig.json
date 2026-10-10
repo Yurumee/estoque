@@ -7,8 +7,10 @@
       "module": "nodenext",
       "moduleResolution": "nodenext",
       "outDir": "./build",
+      "types": ["node"],
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
+      "strictPropertyInitialization": false,
       "sourceMap": true
    }
 }

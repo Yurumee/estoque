@@ -1,20 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import dotenv from "dotenv"
-import { AppDataSource } from './data-source';
+import { ValidationPipe } from '@nestjs/common';
 
-dotenv.config()
-
-AppDataSource.initialize().then(async () =>
-  {
-    const app = await NestFactory.create(AppModule);
-    await app.listen(process.env.PORT ?? 3002);
-  }
-)
-.catch(error => console.log(error))
-
-// async function bootstrap() {
-//   const app = await NestFactory.create(AppModule);
-//   await app.listen(process.env.PORT ?? 3002);
-// }
-// void bootstrap();
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(
+    // valida se o dto e o body condizem em dados e tipos
+        new ValidationPipe({
+          // dados não presentes no dto são descartados
+          whitelist: true
+        }))
+  await app.listen(process.env.PORT ?? 3002);
+}
+void bootstrap();

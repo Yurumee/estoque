@@ -1,14 +1,23 @@
 import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { TProduto } from "./entities/produto.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class ProdutoService {
     // recebe a interface
-    // private readonly produtos: Produto[] = []
+    // private readonly produtos: ProdutoInterface[] = []
 
-    // // busca todos os produtos e retorna como um array
-    // allProducts(): Produtos[] {
-    //     return produtos;
-    // }
+    // repositorio de produtos para as querys
+    constructor(
+        @InjectRepository(TProduto)
+        private ProdutoRepository: Repository<TProduto>
+    ) {}
+
+    // busca todos os produtos e retorna como um array
+    allProducts(): Promise<TProduto[]> {
+        return this.ProdutoRepository.find();
+    }
 
     // findProductId(prodId: number): Produtos | undefined {
     //     return produtos.find((produto) => produto.id === prodId)

@@ -8,6 +8,9 @@ temp/
 /dist
 data-source.ts
 index.ts
+*.sqlite
+*.db
+database/
 
 packages/*/package-lock.json
 sample/**/package-lock.json
