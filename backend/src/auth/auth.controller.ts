@@ -6,11 +6,20 @@ import { authDto } from "./dto";
 export class AuthController {
     constructor(private authService: AuthService) {}
 
+    // entra no sistema
     @Post('/login')
     // @body puxa dados do corpo da requisição
     // importamos o dto do auth
     login(@Body() auth: authDto) {
-        return this.authService.login()
+        return this.authService.login(auth)
+    }
+
+    // cria um novo usuario
+    @Post('/novo-usuario')
+    // @body puxa dados do corpo da requisição
+    // importamos o dto do auth
+    novoUsuario(@Body() auth: authDto) {
+        return this.authService.cadastrarUsuario(auth)
     }
 
     @Post('/sair')
