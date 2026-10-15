@@ -4,13 +4,40 @@ import { Repository } from "typeorm";
 import { authDto } from "./dto";
 import { TUsuario } from "./entities/user.entity";
 import * as argon from 'argon2';
+import { JwtService } from "@nestjs/jwt";
+import { ConfigService } from "@nestjs/config";
 @Injectable()
 export class AuthService {
-    // repositorio de produtos para as querys
     constructor(
         @InjectRepository(TUsuario)
-        private UsuarioRepository: Repository<TUsuario>
+        // repositorio de produtos para as querys
+        private UsuarioRepository: Repository<TUsuario>,
+        // tokens jwt
+        private jwt: JwtService,
+        // importa o modulo de configurações
+        private config: ConfigService
     ) {}
+
+    // gera o token jwt quando o usuario é loggado
+    tokenJWT(idUsuario: number, login: string): Promise<string> {
+        const dados = {
+            sub: idUsuario,
+            login: login
+        }
+
+        // busca a chave secret do arquivo env
+        const secret = this.config.get('JWT_SECRET')
+
+        // retorna o token com a senha secret única
+        // primeiro argumento é o payload, isto é, dados
+        // segundo argumento sao as opções. ex. tempo de validade do token
+        return this.jwt.signAsync(dados, 
+            {
+                expiresIn: '1d',
+                secret: secret
+            }
+        )
+    }
 
     // recebe um dto no mesmo padrão do authDto
     async login(dto: authDto){
@@ -18,7 +45,8 @@ export class AuthService {
         const userExists = await this.UsuarioRepository.findOne({
             where: {
                 login: dto.login
-            }
+            },
+            select: { senha: false }
         })
 
         console.log(userExists)
@@ -35,12 +63,11 @@ export class AuthService {
         
         // checar senha
         const checaSenhas = await argon.verify(userExists.senha, dto.senha)
-        console.log(checaSenhas)
         
-        // enviar o usuario, caso senhas coincidam
+        // envia o token para o usuario, caso senhas coincidam
         if (checaSenhas)
         {
-            return userExists
+            return this.tokenJWT(userExists.id, userExists.login)
         }
         else
         {
@@ -94,7 +121,7 @@ export class AuthService {
             const senhaCripto = await argon.hash(dto.senha)
             
             // cria uma nova instancia do usuario e armazena no banco
-            const user = await this.UsuarioRepository.insert({
+            await this.UsuarioRepository.insert({
                     login: dto.login,
                     senha: senhaCripto
                 },
@@ -109,7 +136,11 @@ export class AuthService {
             })
 
             // retorna o usuario para pagina principal
-            return newUser
+            // envia o token para o usuario
+            
+            console.log(newUser)
+            // return newUser
+            // return this.tokenJWT(newUser[, userExists.login)
         }
     }
 

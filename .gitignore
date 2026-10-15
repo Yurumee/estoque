@@ -11,6 +11,7 @@ index.ts
 *.sqlite
 *.db
 database/
+secret_generator.js
 
 packages/*/package-lock.json
 sample/**/package-lock.json
