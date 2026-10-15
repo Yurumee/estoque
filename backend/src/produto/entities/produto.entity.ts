@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { TEstoque } from "../../estoque/entities/estoque.entity";
+import { TUsuario } from "../../auth/entities/user.entity";
 
 @Entity()
 export class TProduto {
@@ -12,23 +14,32 @@ export class TProduto {
     preco: number;
 
     @Column()
-    marcaPref: string;
+    marcaPref?: string;
 
     @Column()
-    marcaAlt: string;
+    marcaAlt?: string;
 
     @Column()
     categoria: string;
 
-    @Column()
-    estoqueAtual: string;
+    // @Column()
+    // estoqueAtual: number;
 
-    @Column()
-    estoqueUso: string;
+    // @Column()
+    // estoqueUso?: number;
 
     @Column()
     dataCriacao: Date;
 
     @Column()
     ultAtualizacao: Date;
+
+    // relacionamento muitos pra um (muitos produtos para um estoque)
+    @ManyToOne(() => TEstoque, (estoque) => estoque.produto)
+    estoque: TEstoque
+
+    // relacionamento many to many (muitos usuarios adicionam muitos produtos)
+    @ManyToMany(() => TUsuario)
+    @JoinTable()
+    usuarios: TUsuario[]
 }

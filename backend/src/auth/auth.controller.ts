@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, HttpException, HttpStatus, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { authDto } from "./dto";
 
@@ -18,8 +18,9 @@ export class AuthController {
     @Post('/novo-usuario')
     // @body puxa dados do corpo da requisição
     // importamos o dto do auth
-    novoUsuario(@Body() auth: authDto) {
-        return this.authService.cadastrarUsuario(auth)
+    async novoUsuario(@Body() auth: authDto) {
+     
+        return await this.authService.cadastrarUsuario(auth)
     }
 
     @Post('/sair')
